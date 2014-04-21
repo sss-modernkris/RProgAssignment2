@@ -8,11 +8,58 @@
 ##
 ##  This is accomplihed by the makeCacheMatrix and cachSolve functions
 ##
+##
+## usage: if we have matrix a 3x3 then 
+## > a
+##       [,1] [,2] [,3]
+## [1,]    1    3    7
+## [2,]    5    4    9
+## [3,]    6    5    3
+## > b = makeCacheMatrix(a)
+## to get the inverse of a
+## > cacheSolve(b) 
+##          [,1]       [,2]        [,3]
+## [1,] -0.36263736  0.2857143 -0.01098901
+## [2,]  0.42857143 -0.4285714  0.28571429
+## [3,]  0.01098901  0.1428571 -0.12087912
+## > cacheSolve(b)
+## getting cached data
+##         [,1]       [,2]        [,3]
+## [1,] -0.36263736  0.2857143 -0.01098901
+## [2,]  0.42857143 -0.4285714  0.28571429
+## [3,]  0.01098901  0.1428571 -0.12087912
+## >
+## to see the matrix in cache
+## > b$get()
+##       [,1] [,2] [,3]
+## [1,]    1    3    7
+## [2,]    5    4    9
+## [3,]    6    5    3
+## > 
+## the cached matrix can be changed using set function
+## > c
+##       [,1] [,2]
+## [1,]    2    3
+## [2,]    5    9
+## > b$set(c)
+## > cacheSolve(b)
+##    [,1]       [,2]
+## [1,]  3.000000 -1.0000000
+## [2,] -1.666667  0.6666667
+## >
+##
 
 
+##
+##  makeCacheMatrix
+##  Description: When the makeCacheMatrix function is called with matrix argument, it puts the matrix in cache
+##               and it retunrs the list of the functions ( set, get, setinv, and getinv).
+##  example: a = matrix(c(1,3,5,9),2,2)
+##           b = makeCacheMatrix(a)
+##           b will be list of functions (set, get, setinv, getinv)
+##           b$get() will return the cached matrix which is 'a' in this case
 ##
 ##  makeCacheMatrix contains following cached data and functions:
-##
 ##	Cached Data: matrix and its inverse
 ##
 ##	functions (methods):
@@ -28,14 +75,15 @@
 makeCacheMatrix <- function(x = matrix()) {
 
         inv_x <- NULL
-        set <- function(x) {
-                x <<- x
+        set <- function(y) {
+                x <<- y
                 inv_x <<- NULL
         }
         get <- function() x
         setinv <- function(inverse) inv_x <<- inverse
         getinv <- function() inv_x
-        list(set = set, get = get,
+        list(set = set, 
+             get = get,
              setinv = setinv,
              getinv = getinv)
 }
@@ -49,6 +97,28 @@ makeCacheMatrix <- function(x = matrix()) {
 ## computes the inverse (by normal solve function) and sets the cache inverse (by using setinv function).
 ## future reads will only read the cache inverse it does not need to recompute the inverse.
 ##
+## usage: if we have matrix a 3x3 then 
+## > a
+##       [,1] [,2] [,3]
+## [1,]    1    3    7
+## [2,]    5    4    9
+## [3,]    6    5    3
+## > b = makeCacheMatrix(a)
+## to get the inverse of a
+## > cacheSolve(b) 
+##          [,1]       [,2]        [,3]
+## [1,] -0.36263736  0.2857143 -0.01098901
+## [2,]  0.42857143 -0.4285714  0.28571429
+## [3,]  0.01098901  0.1428571 -0.12087912
+## > cacheSolve(b)
+## getting cached data
+##         [,1]       [,2]        [,3]
+## [1,] -0.36263736  0.2857143 -0.01098901
+## [2,]  0.42857143 -0.4285714  0.28571429
+## [3,]  0.01098901  0.1428571 -0.12087912
+## >
+
+  
 
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
